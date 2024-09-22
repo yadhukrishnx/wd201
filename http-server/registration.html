@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Form</title>
+    <!-- Tailwind Cdn -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body style="display:flex;  justify-content:center;  " class="flex-col justify-center items-center   w-100 p-3">
+
+
+    <a href="/project">&lt;- Projects</a>
+    <div class="bg-white p-8 rounded-lg shadow-lg w-96 mt-3">
+        <h2 class="text-2xl font-bold text-center mb-6">Registration Form</h2>
+        <form id="userform" method="post" class="space-y-4">
+
+            <!-- Name -->
+            <div>
+                <label for="name" class="block text-gray-700">Name</label>
+                <input type="text" id="name" name="name" class="w-full p-2 border border-gray-300 rounded-lg " required >
+            </div>
+
+            <!-- Email -->
+            <div>
+                <label for="email" class="block text-gray-700">Email</label>
+                <input type="email" id="email" name="email" class="w-full p-2 border border-gray-300 rounded-lg " required>
+            </div>
+
+            <!-- Password -->
+            <div>
+                <label for="password" class="block text-gray-700">Password</label>
+                <input type="password" id="password" name="password" class="w-full p-2 border border-gray-300 rounded-lg " required>
+            </div>
+
+            <!-- Date of Birth -->
+            <div>
+                <label for="dob" class="block text-gray-700">Date of Birth</label>
+                <input type="date" id="dob" name="dob" class="w-full p-2 border border-gray-300 rounded-lg " required>
+            </div>
+
+            <!-- Accept Terms -->
+            <div class="flex items-center">
+                <input type="checkbox" id="terms" name="terms" class="h-4 w-4 text-green-500 border-gray-300 rounded focus:ring-green-300" required >
+                <label for="terms" class="ml-2 text-red-700">I accept the terms and conditions</label>
+            </div>
+
+            <!-- Submit Button -->
+            <div>
+                <button type="submit" class="w-full bg-green-500 text-white font-semibold py-2 rounded-lg hover:bg-green-600 focus:outline-none focus:ring focus:ring-green-300">Register</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Entries  -->
+    <div class="w-full max-w-4xl bg-white p-8 rounded-lg shadow-lg mt-4 ">
+       
+            <h2 class="text-2xl font-bold text-center mb-6">Entries </h2> 
+
+        
+        
+        <table class="min-w-full bg-white border border-gray-200">
+            <thead>
+                <tr class="bg-gray-200">
+                    <th class="py-2 px-4 border border-gray-300">Name</th>
+                    <th class="py-2 px-4 border border-gray-300">Email</th>
+                    <th class="py-2 px-4 border border-gray-300">Password</th>
+                    <th class="py-2 px-4 border border-gray-300">Dob</th>
+                    <th class="py-2 px-4 border border-gray-300">Accepted Terms? </th>
+                </tr>
+            </thead>
+            <tbody id="details">
+               
+              
+                
+            </tbody>
+             
+        </table>
+
+    </div>
+
+    <script>
+        // Form validation
+
+let userForm = document.getElementById("userform");
+
+// Retrive Entries
+const retrieveEntries = () => {
+    let entries = localStorage.getItem("user-entries");
+    if(entries){
+        entries = JSON.parse(entries);
+    }else {
+        entries = [];
+    }
+    return entries;
+}
+
+let userEntries = retrieveEntries();
+
+
+// Display 
+
+const displayEntries = () => {
+    const entries = retrieveEntries();
+
+    const tableEntries = entries.map((entry) => {
+        const nameCell = `<td>${entry.name}</td>`;
+        const emailCell = `<td>${entry.email}</td>`;
+        const passwordCell = `<td>${entry.password}</td>`;
+        const dobCell = `<td>${entry.dob}</td>`;
+        const termsCell = `<td>${entry.terms}</td>`;
+
+        const row = `<tr>${nameCell}  ${emailCell} ${passwordCell} ${dobCell} ${termsCell}</tr>`;
+        return row;
+    }).join("\n");
+
+    const rows = tableEntries;
+    let details = document.getElementById("details");
+    details.innerHTML = rows;
+}
+
+
+
+
+const saveForm = (event) => {
+    event.preventDefault();
+    
+    let value = (id) => document.getElementById(id).value;
+    let name = value("name"),
+    email = value("email"),
+    password = value("password"),
+    dob = value("dob");
+
+    let terms = document.getElementById("terms").checked;
+
+
+    // Dob validation When Submit
+    element=document.getElementById("dob");
+    validate(element);
+
+
+    if(validate(element)){
+        const entry = {
+            name,
+            email,
+            password,
+            dob,
+            terms
+        }
+    
+        userEntries.push(entry);
+    
+        localStorage.setItem("user-entries",JSON.stringify(userEntries));
+        displayEntries();
+        userForm.reset();
+    }
+    
+
+
+    
+}
+
+
+userForm.addEventListener("submit",saveForm);
+displayEntries();
+
+
+
+
+// Clear custom validity message when the user updates the date input
+
+document.getElementById("dob").addEventListener("input", (event) => {
+    event.target.setCustomValidity("");
+});
+
+
+
+// Age calculation from dob
+
+calculateAge = (dob) => {
+    const ageDifMs = Date.now() - new Date(dob).getTime();
+    const ageDate = new Date(ageDifMs);
+    const age = Math.abs(ageDate.getUTCFullYear() - 1970);
+    return age;
+}
+
+
+// Dob validation 
+
+function validate(element){
+    element.setCustomValidity("");
+    dob=element.value;
+    age = calculateAge(dob);
+
+    if(age < 18 ){
+        
+        element.setCustomValidity("Age must be greater than 18");
+        element.reportValidity();
+        return false;
+        
+
+    }
+   
+    else if( age > 55){
+        
+        element.setCustomValidity("Age must be less than 55");
+        element.reportValidity();
+        return false;
+    }
+    else{
+        element.setCustomValidity("");
+        return true;
+    }
+   
+    
+    
+}
+
+    </script>
+</body>
+</html>
