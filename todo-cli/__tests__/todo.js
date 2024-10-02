@@ -3,13 +3,6 @@ const todoList = require('../todo');
 const { all, markAsComplete, add, overdue, dueToday, dueLater, today } =
   todoList();
 describe('TodoList Testing Suites 🛸', () => {
-  beforeAll(() => {
-    add({
-      title: 'Test Todo',
-      completed: false,
-      dueDate: new Date().toLocaleDateString('en-CA'),
-    });
-  });
 
   test('Should be able to add new todo', () => {
     const todoItemsCount = all.length;
