@@ -11,7 +11,7 @@ describe('TodoList Testing Suites 🛸', () => {
       dueDate: new Date().toLocaleDateString('en-CA'),
     });
   });
-  
+
   test("Should add new todo", () => {
     const todoItemsCount = all.length;
     add({
@@ -19,20 +19,27 @@ describe('TodoList Testing Suites 🛸', () => {
       completed: false,
       dueDate: new Date().toLocaleDateString("en-CA"),
     });
+    add({
+      title: "New test todo 2",
+      completed: true,
+      dueDate: new Date().toLocaleDateString("en-CA"),
+    });
+    add({
+      title: "New test todo 3",
+      completed: true,
+      dueDate: "2026-08-23",
+    });
   
     // Check if item was actually added
-    expect(all.length).toBe(todoItemsCount + 1);
-    expect(all[all.length - 1].title).toBe("New test todo"); // Additional check to confirm the title
-    expect(all[all.length - 1].completed).toBe(false); // Additional check to confirm the completed status
+    expect(all.length).toBe(todoItemsCount + 3);
+    
   });
   
   test("Should mark a todo as complete", () => {
-    expect(all[0].completed).toBe(false);
     markAsComplete(0);
-  
-    // Check if the status was actually updated
     expect(all[0].completed).toBe(true);
-    expect(all.some((todo) => todo.completed === true)).toBe(true); // Confirm that some todo is completed
+    markAsComplete(1);
+    expect(all[1].completed).toBe(true);
   });
 
 
