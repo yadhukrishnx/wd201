@@ -4,42 +4,19 @@ const { all, markAsComplete, add, overdue, dueToday, dueLater } = todoList();
 
 describe('TodoList Testing Suites 🛸', () => {
   // Set up a new todo before running the test cases.
-  beforeAll(() => {
-    add({
-      title: 'Test todo',
-      completed: false,
-      dueDate: new Date().toLocaleDateString('en-CA'),
-    });
-  });
+  test("Should add a new todo", () => {
+    const initialLength = todo.all.length;
+    todo.add({ title: "New Todo", completed: false, dueDate: today });
+    expect(todo.all.length).toBe(initialLength + 1); // Expect the length to increase by 1
+    expect(todo.all[initialLength].title).toBe("New Todo");
 
-  test("Should add new todo", () => {
-    const todoItemsCount = all.length;
-    add({
-      title: "New test todo",
-      completed: false,
-      dueDate: new Date().toLocaleDateString("en-CA"),
-    });
-    add({
-      title: "New test todo 2",
-      completed: true,
-      dueDate: new Date().toLocaleDateString("en-CA"),
-    });
-    add({
-      title: "New test todo 3",
-      completed: true,
-      dueDate: "2026-08-23",
-    });
-  
-    // Check if item was actually added
-    expect(all.length).toBe(todoItemsCount + 3);
-    
   });
   
-  test("Should mark a todo as complete", () => {
-    markAsComplete(0);
-    expect(all[0].completed).toBe(true);
-    markAsComplete(1);
-    expect(all[1].completed).toBe(true);
+  test("Should mark a todo as completed", () => {
+    todo.add({ title: "Mark as complete", completed: false, dueDate: today });
+    expect(todo.all[0].completed).toBe(false); // Initially not completed
+    todo.markAsComplete(0); // Mark it as complete
+    expect(todo.all[0].completed).toBe(true); // Now it should be completed
   });
 
 
