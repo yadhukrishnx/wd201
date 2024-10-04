@@ -6,36 +6,41 @@ describe('TodoList Testing Suites 🛸', () => {
   // Set up a new todo before running the test cases.
   beforeAll(() => {
     add({
-      title: "Test todo",
+      title: 'Test todo',
       completed: false,
-      dueDate: new Date().toLocaleDateString("en-CA"),
+      dueDate: new Date().toLocaleDateString('en-CA'),
     });
   });
-
+  
   test("Should add new todo", () => {
-    // Get the initial count of todos
     const todoItemsCount = all.length;
     add({
       title: "New test todo",
       completed: false,
       dueDate: new Date().toLocaleDateString("en-CA"),
     });
-    // Ensure the count has increased by 1
+  
+    // Check if item was actually added
     expect(all.length).toBe(todoItemsCount + 1);
+    expect(all[all.length - 1].title).toBe("New test todo"); // Additional check to confirm the title
+    expect(all[all.length - 1].completed).toBe(false); // Additional check to confirm the completed status
+  });
+  
+  test("Should mark a todo as complete", () => {
+    expect(all[0].completed).toBe(false);
+    markAsComplete(0);
+  
+    // Check if the status was actually updated
+    expect(all[0].completed).toBe(true);
+    expect(all.some((todo) => todo.completed === true)).toBe(true); // Confirm that some todo is completed
   });
 
-  test("Should mark a todo as complete", () => {
-    // Ensure the first todo is not complete
-    expect(all[0].completed).toBe(false);
-    // Mark the first todo as complete
-    markAsComplete(0);
-    // Ensure the first todo is now marked as complete
-    expect(all[0].completed).toBe(true);
-  });
 
   test('Retrieval of overdue items', () => {
     const overdueItems = overdue();
-    expect(overdueItems.every((item) => new Date(item.dueDate) < new Date())).toBe(true);
+    expect(
+      overdueItems.every((item) => new Date(item.dueDate) < new Date())
+    ).toBe(true);
   });
 
   test('Retrieve due today items', () => {
@@ -46,6 +51,8 @@ describe('TodoList Testing Suites 🛸', () => {
 
   test('Retrieve due later items', () => {
     const dueLaterItems = dueLater();
-    expect(dueLaterItems.every((item) => new Date(item.dueDate) > new Date())).toBe(true);
+    expect(
+      dueLaterItems.every((item) => new Date(item.dueDate) > new Date())
+    ).toBe(true);
   });
 });
