@@ -1,12 +1,16 @@
 /* eslint-disable no-undef */
-const todoList = require('../todo');
+// describe("First test suite",()=>{
+//     test("First case",()=>{
+//         expect(false).toBe(true);
+//     })
+// })
+
+const todoList = require("../todo");
+
 const { all, markAsComplete, add, overdue, dueToday, dueLater } = todoList();
 
-describe('TodoList Testing Suites 🛸', () => {
-  
-
-
-    beforeAll(() => {
+describe("Todo List test suit", () => {
+  beforeAll(() => {
     const dateToday = new Date();
     add({
       title: "Test todo 1",
@@ -45,23 +49,22 @@ describe('TodoList Testing Suites 🛸', () => {
     expect(all[0].completed).toBe(true);
   });
 
-  test('Retrieval of overdue items', () => {
-    const overdueItems = overdue();
-    expect(
-      overdueItems.every((item) => new Date(item.dueDate) < new Date())
-    ).toBe(true);
+  test("Should retrive overdue items", () => {
+    const overduesTO = overdue();
+    expect(overduesTO.length).toBe(1);
+    expect(overduesTO[0].title).toBe("Test todo 2");
   });
 
-  test('Retrieve due today items', () => {
-    const dueTodayItems = dueToday();
-    const today = new Date().toLocaleDateString('en-CA');
-    expect(dueTodayItems.every((item) => item.dueDate === today)).toBe(true);
+  test("Should retrieve due today items", () => {
+    const todayTodos = dueToday();
+    console.log(todayTodos);
+    expect(todayTodos.length).toBe(1);
+    expect(todayTodos[0].title).toBe("Test todo 1");
   });
 
-  test('Retrieve due later items', () => {
-    const dueLaterItems = dueLater();
-    expect(
-      dueLaterItems.every((item) => new Date(item.dueDate) > new Date())
-    ).toBe(true);
+  test("Should retrive duelater items", () => {
+    const duelaterTo = dueLater();
+    expect(duelaterTo.length).toBe(1);
+    expect(duelaterTo[0].title).toBe("Test todo 3");
   });
 });
