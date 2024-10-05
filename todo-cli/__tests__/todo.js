@@ -5,41 +5,45 @@ const { all, markAsComplete, add, overdue, dueToday, dueLater } = todoList();
 describe('TodoList Testing Suites 🛸', () => {
   
 
-  test("Should add new todo", () => {
+
+    beforeAll(() => {
+    const dateToday = new Date();
     add({
-      title: "New test todo",
+      title: "Test todo 1",
       completed: false,
-      dueDate:"2026-08-24",
+      dueDate: new Date().toISOString().slice(0, 10),
     });
     add({
-      title: "New test todo 2",
-      completed: true,
-      dueDate: "2026-08-25",
+      title: "Test todo 2",
+      completed: false,
+      dueDate: new Date(new Date().setDate(dateToday.getDate() - 1))
+        .toISOString()
+        .slice(0, 10),
     });
     add({
-      title: "New test todo 3",
-      completed: true,
-      dueDate: "2026-08-23",
+      title: "Test todo 3",
+      completed: false,
+      dueDate: new Date(new Date().setDate(dateToday.getDate() + 1))
+        .toISOString()
+        .slice(0, 10),
     });
-  
-    // Check if item was actually added
-    expect(all.length).toBe(3);
-    expect(all[0].title).toBe("New test todo");
-    expect(all[1].title).toBe("New test todo 2");
-    expect(all[0].completed).toBe(false);
-    expect(all[1].completed).toBe(true);
-    expect(all[0].dueDate).toBe("2026-08-24");
-    expect(all[1].dueDate).toBe("2026-08-25");
   });
-  
-  test("Should mark a todo as complete", () => {
+  test("Should add new todo", () => {
+    const todocount = all.length;
+    add({
+      title: "Test todo add",
+      completed: false,
+      dueDate: new Date().toISOString().slice(0, 10),
+    });
+    expect(all.length).toBe(todocount + 1);
+    all.pop();
+  });
+
+  test("Should mark as Complete", () => {
     expect(all[0].completed).toBe(false);
     markAsComplete(0);
     expect(all[0].completed).toBe(true);
-    markAsComplete(1);
-    expect(all[1].completed).toBe(true);
-  }); 
-
+  });
 
   test('Retrieval of overdue items', () => {
     const overdueItems = overdue();
