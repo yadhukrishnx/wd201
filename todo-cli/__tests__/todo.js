@@ -9,12 +9,12 @@ describe('TodoList Testing Suites 🛸', () => {
     add({
       title: "New test todo",
       completed: false,
-      dueDate: new Date().toLocaleDateString("en-CA"),
+      dueDate:"2026-08-24",
     });
     add({
       title: "New test todo 2",
       completed: true,
-      dueDate: new Date().toLocaleDateString("en-CA"),
+      dueDate: "2026-08-25",
     });
     add({
       title: "New test todo 3",
@@ -25,7 +25,11 @@ describe('TodoList Testing Suites 🛸', () => {
     // Check if item was actually added
     expect(all.length).toBe(3);
     expect(all[0].title).toBe("New test todo");
-    
+    expect(all[1].title).toBe("New test todo 2");
+    expect(all[0].completed).toBe(false);
+    expect(all[1].completed).toBe(true);
+    expect(all[0].dueDate).toBe("2026-08-24");
+    expect(all[1].dueDate).toBe("2026-08-25");
   });
   
   test("Should mark a todo as complete", () => {
